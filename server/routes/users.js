@@ -10,24 +10,29 @@ router.get('/', (req, res) => {
     });
 });
 router.get(':/id', (req, res) => {
-  let id = req.params.id
   User
-    .findById()
+    .findById(req.params.id)
     .then(users => {
-      res.status(200).json(users)
+      if (user) {
+      res.status(200).json(users)} else {
+        res.status(404).send('ID does not exist!')
+      }
     });
 });
 
 router.post('/', (req, res) => {
+  let newUser = req.body
   User
-    .save()
+    .save(newUser)
     .then(
       users => {
-        res.status(200).json(users)
+        res.status(201).json(users)
       });
 });
 
 router.put(':/id', (req, res) => {
+  let id = req.params.id;
+  let update = req.body
   User
     .findByIdAndUpdate()
     .then(users => {
