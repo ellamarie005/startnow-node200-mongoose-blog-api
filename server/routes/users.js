@@ -9,23 +9,23 @@ router.get('/', (req, res) => {
       res.status(200).json(users);
     });
 });
+
 router.get(':/id', (req, res) => {
+  let id = req.params.id;
   User
-    .findById(req.params.id)
-    .then(users => {
-      if (user) {
-      res.status(200).json(users)} else {
-        res.status(404).send('ID does not exist!')
-      }
-    });
+    .findById(id, (err, user) => {
+      if (user) {res.status(200).json(users)}
+      else {res.status(404).send('ID does not exist!')}
+    })
+    .then(res.status(200).json(user))
 });
 
 router.post('/', (req, res) => {
   let newUser = req.body
   User
-    .save(newUser)
+    .save()
     .then(
-      users => {
+      newUser => {
         res.status(201).json(users)
       });
 });
@@ -34,17 +34,22 @@ router.put(':/id', (req, res) => {
   let id = req.params.id;
   let update = req.body
   User
-    .findByIdAndUpdate()
-    .then(users => {
-      res.status(200).json(users);
+    .findByIdAndUpdate(id, update)
+    .then(user => {
+      res.status(204).json(user);
     });
 });
 
 router.delete(':/id', (req, res) => {
-  users.findByIdAndRemove()
-  .then(users => {
-    res.status(200).json(users)
-  })
+  let id = req.params.id
+  if (id) {
+    users.findByIdAndRemove(id)
+      .then(users => {
+        if (id) {
+          res.status(200).json(users)
+        }
+      })
+  }
 });
 
 module.exports = router;
